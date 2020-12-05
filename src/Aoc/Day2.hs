@@ -4,6 +4,7 @@ module Aoc.Day2 (
     parsePasswordList,
     parsePasswordListLine,
     isValidPassword,
+    isValidPasswordRevised,
     validPasswords,
     part1,
     part2
@@ -16,7 +17,7 @@ import qualified Data.Text as T
 import Data.Text (Text, count, singleton, split)
 import Data.Text.Read (decimal)
 
-data PasswordPolicy = PasswordPolicy { minOccur :: Int, maxOccur :: Int, char :: Char }
+data PasswordPolicy = PasswordPolicy { lower :: Int, upper :: Int, char :: Char }
     deriving (Show, Eq)
 
 data PasswordListError
@@ -28,7 +29,7 @@ data PasswordListError
 
 isValidPassword :: PasswordPolicy -> Text -> Bool
 isValidPassword p = 
-    inRange (minOccur p, maxOccur p) . count (singleton (char p))
+    inRange (lower p, upper p) . count (singleton (char p))
 
 parsePasswordListLine :: Text -> Either PasswordListError (PasswordPolicy, Text)
 parsePasswordListLine = 
@@ -43,13 +44,23 @@ parsePasswordListLine =
 parsePasswordList :: Text -> Either PasswordListError [(PasswordPolicy, Text)]
 parsePasswordList = traverse parsePasswordListLine . T.lines
 
-validPasswords :: Text -> Either PasswordListError Int
-validPasswords =
-    let countValid = length . filter (uncurry isValidPassword)
+validPasswords :: (PasswordPolicy -> Text -> Bool) -> Text -> Either PasswordListError Int
+validPasswords isValid =
+    let countValid = length . filter (uncurry isValid)
     in fmap countValid . parsePasswordList
 
 part1 :: Text -> Either PasswordListError Int
-part1 = validPasswords
+part1 = validPasswords isValidPassword
 
-part2 :: Text -> ()
-part2 = const ()
+safeIndex :: Text -> Int -> Maybe Char
+safeIndex t i =
+    if i >= 0 && i < T.length t then pure (T.index t i) else Nothing
+
+isValidPasswordRevised :: PasswordPolicy -> Text -> Bool
+isValidPasswordRevised (PasswordPolicy i j c) t =
+    let nth = safeIndex t . pred
+        xor a b = (a || b) && not (a && b)
+    in (nth i == Just c) `xor` (nth j == Just c)
+
+part2 :: Text -> Either PasswordListError Int
+part2 = validPasswords isValidPasswordRevised

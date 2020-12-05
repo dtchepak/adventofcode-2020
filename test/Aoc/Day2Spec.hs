@@ -39,4 +39,11 @@ spec = do
           , (PasswordPolicy 2 9 'c', "ccccccccc")
         ]
     it "part 1: sample data has 2 valid passwords" $ 
-      validPasswords sampleData `shouldBe` pure 2
+      part1 sampleData `shouldBe` pure 2
+  describe "part 2" $ do
+    it "1-3 a: abcde is valid: position 1 contains a and position 3 does not." $
+      PasswordPolicy 1 3 'a' `isValidPasswordRevised` "abcde"
+    it "1-3 b: cdefg is invalid: neither position 1 nor position 3 contains b." $
+      not . isValidPasswordRevised (PasswordPolicy 1 3 'b') $ "cdefg"
+    it "2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c." $
+      not . isValidPasswordRevised (PasswordPolicy 2 9 'c') $ "ccccccccc"
