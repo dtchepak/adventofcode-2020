@@ -1,4 +1,4 @@
-module Aoc.Day2 (
+module Aoc.Day02 (
     PasswordPolicy(..),
     PasswordListError(..),
     parsePasswordList,

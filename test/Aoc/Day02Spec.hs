@@ -1,7 +1,7 @@
-module Aoc.Day2Spec (spec) where
+module Aoc.Day02Spec (spec) where
 
 import Test.Hspec
-import Aoc.Day2
+import Aoc.Day02
 
 spec :: Spec
 spec = do

@@ -1,4 +1,4 @@
-module Aoc.Day1 (
+module Aoc.Day01 (
     findSum2020
     , findTripleSum2020
     , part1

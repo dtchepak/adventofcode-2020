@@ -27,8 +27,8 @@ common common-options
 library
   import:              common-options
   exposed-modules:     Aoc,
-                       Aoc.Day1,
-                       Aoc.Day2
+                       Aoc.Day01,
+                       Aoc.Day02
   other-modules:       
   hs-source-dirs:      src
 
