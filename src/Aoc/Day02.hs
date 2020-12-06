@@ -35,7 +35,7 @@ parsePasswordListLine :: Text -> Either PasswordListError (PasswordPolicy, Text)
 parsePasswordListLine = 
     let tryReadInt s = bimap (const (InvalidInt s)) fst (decimal s)
         tryReadChar s = if T.length s == 1 then pure (T.head s) else Left (InvalidChar s)
-        tryReadEmpty s = if s == T.empty then pure () else Left (ExpectedEmpty s)
+        tryReadEmpty s = if T.null s then pure () else Left (ExpectedEmpty s)
         tryReadSegments [a, b, c, d, e] =
             PasswordPolicy <$> tryReadInt a <*> tryReadInt b <*> tryReadChar c <* tryReadEmpty d <&> (,e)
         tryReadSegments other = Left (UnrecognisedInput other)
