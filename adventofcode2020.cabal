@@ -30,7 +30,8 @@ library
   exposed-modules:     Aoc,
                        Aoc.Day01,
                        Aoc.Day02,
-                       Aoc.Day03
+                       Aoc.Day03,
+                       Aoc.Day04
   other-modules:       
   hs-source-dirs:      src
 
