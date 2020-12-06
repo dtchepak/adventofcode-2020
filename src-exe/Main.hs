@@ -3,6 +3,7 @@ module Main where
 import qualified Aoc.Day01 as Day01
 import qualified Aoc.Day02 as Day02
 import qualified Aoc.Day03 as Day03
+import qualified Aoc.Day04 as Day04
 
 import qualified Data.Text.IO as T
 
@@ -22,3 +23,7 @@ main = do
   day03Input <- T.readFile "data/day03.txt"
   print (Day03.part1 day03Input)
   print (Day03.part2 day03Input)
+  putStrLn "Day 4"
+  putStrLn "======"
+  day04Input <- T.readFile "data/day04.txt"
+  print (Day04.part1 day04Input)
