@@ -4,6 +4,7 @@ import qualified Aoc.Day01 as Day01
 import qualified Aoc.Day02 as Day02
 import qualified Aoc.Day03 as Day03
 import qualified Aoc.Day04 as Day04
+import qualified Aoc.Day05 as Day05
 
 import qualified Data.Text.IO as T
 
