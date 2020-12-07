@@ -27,3 +27,4 @@ main = do
   putStrLn "======"
   day04Input <- T.readFile "data/day04.txt"
   print (Day04.part1 day04Input)
+  print (Day04.part2 day04Input)
