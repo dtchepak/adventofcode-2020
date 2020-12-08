@@ -6,6 +6,7 @@ import qualified Aoc.Day03 as Day03
 import qualified Aoc.Day04 as Day04
 import qualified Aoc.Day05 as Day05
 import qualified Aoc.Day06 as Day06
+import qualified Aoc.Day07 as Day07
 
 import qualified Data.Text.IO as T
 
@@ -39,3 +40,8 @@ main = do
   putStrLn "======"
   day06Input <- T.readFile "data/day06.txt"
   print (Day06.part1 day06Input)
+  print (Day06.part2 day06Input)
+  putStrLn "Day 7"
+  putStrLn "======"
+  day07Input <- T.readFile "data/day07.txt"
+  print (Day07.part1 day07Input)
