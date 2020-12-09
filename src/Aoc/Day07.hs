@@ -52,17 +52,17 @@ parseBag =
 
 parseBagList :: Parser [(Int, Bag)]
 parseBagList =
-  let bag = (,) <$> decimal <*> (space' *> parseBag)
+  let bagQty = (,) <$> decimal <*> (space' *> parseBag)
       noBags = string "no other bags" $> []
-   in (bag `sepBy1'` string ", ") <|> noBags
+   in (bagQty `sepBy1'` string ", ") <|> noBags
 
 parseBagRule :: Parser BagRule
 parseBagRule = do
-  bag <- parseBag
+  b <- parseBag
   _ <- string " contain "
   bagList <- parseBagList
   _ <- string "."
-  pure $ BagRule bag bagList
+  pure $ BagRule b bagList
 
 readBag :: Text -> Either String Bag
 readBag = parseOnly parseBag

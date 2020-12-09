@@ -9,7 +9,10 @@ spec :: Spec
 spec = do
   describe "part 1 example" $ do
     it "acc on dupe instruction" $ do
-      runProgram sampleProgram `shouldBe` Right (1, 5)
+      part1 sampleProgram `shouldBe` Right (1, 5)
+  describe "part 2 exampel" $ do
+    it "finds uncorrupt program" $ do
+      part2 sampleProgram `shouldBe` Just (9, 8)
 
 sampleProgram :: Text
 sampleProgram =
