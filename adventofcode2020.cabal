@@ -36,7 +36,8 @@ library
                        Aoc.Day04,
                        Aoc.Day05,
                        Aoc.Day06,
-                       Aoc.Day07
+                       Aoc.Day07,
+                       Aoc.Day08
   other-modules:       
   hs-source-dirs:      src
 
