@@ -45,3 +45,4 @@ main = do
   putStrLn "======"
   day07Input <- T.readFile "data/day07.txt"
   print (Day07.part1 day07Input)
+  print (Day07.part2 day07Input)

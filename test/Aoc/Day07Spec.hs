@@ -15,10 +15,20 @@ spec = do
       readBag "dark orange bag" `shouldBe` Right (Bag "dark orange")
     it "parse a rule" $ do
       readRule (head sampleRules)
-        `shouldBe` Right (BagRule (Bag "light red") [Bag "bright white", Bag "muted yellow"])
+        `shouldBe` Right (BagRule (Bag "light red") [(1, Bag "bright white"), (2, Bag "muted yellow")])
     it "example" $ do
       flip findBagsToContain (Bag "shiny gold") <$> readRules sampleRulesText
         `shouldBe` (Right . Set.fromList) [Bag "bright white", Bag "muted yellow", Bag "dark orange", Bag "light red"]
+  describe "part 2" $ do
+    it "lookup bag" $ do
+      lookupBag (Bag "shiny gold") <$> readRules sampleRulesText
+        `shouldBe` Right [(1, Bag "dark olive"), (2, Bag "vibrant plum")]
+    it "example" $ do
+      countBagsIn (Bag "shiny gold") <$> readRules sampleRulesText
+        `shouldBe` Right 32
+    it "example 2" $ do
+      countBagsIn (Bag "shiny gold") <$> readRules sampleRules2
+        `shouldBe` Right 126
 
 sampleRules :: [Text]
 sampleRules =
@@ -35,3 +45,15 @@ sampleRules =
 
 sampleRulesText :: Text
 sampleRulesText = T.unlines sampleRules
+
+sampleRules2 :: Text
+sampleRules2 =
+  T.unlines
+    [ "shiny gold bags contain 2 dark red bags.",
+      "dark red bags contain 2 dark orange bags.",
+      "dark orange bags contain 2 dark yellow bags.",
+      "dark yellow bags contain 2 dark green bags.",
+      "dark green bags contain 2 dark blue bags.",
+      "dark blue bags contain 2 dark violet bags.",
+      "dark violet bags contain no other bags."
+    ]

@@ -5,7 +5,10 @@ module Aoc.Day07
     BagRule (..),
     findBagsToContain,
     readRules,
+    lookupBag,
+    countBagsIn,
     part1,
+    part2,
   )
 where
 
@@ -16,6 +19,7 @@ where
 import Control.Applicative
 import Data.Attoparsec.Text
 import Data.Functor (($>))
+import Data.List (find)
 import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Text (Text)
@@ -24,14 +28,17 @@ import qualified Data.Text as T
 newtype Bag = Bag Text
   deriving (Show, Eq, Ord)
 
-data BagRule = BagRule Bag [Bag]
+data BagRule = BagRule Bag [(Int, Bag)]
   deriving (Show, Eq)
 
 bag :: BagRule -> Bag
 bag (BagRule x _) = x
 
 carries :: BagRule -> [Bag]
-carries (BagRule _ x) = x
+carries = fmap snd . carriesQty
+
+carriesQty :: BagRule -> [(Int, Bag)]
+carriesQty (BagRule _ x) = x
 
 word :: Parser Text
 word = T.pack <$> many1' letter
@@ -43,9 +50,9 @@ parseBag :: Parser Bag
 parseBag =
   Bag . T.concat <$> sequence [word, space', word <* space' <* (string "bags" <|> string "bag")]
 
-parseBagList :: Parser [Bag]
+parseBagList :: Parser [(Int, Bag)]
 parseBagList =
-  let bag = decimal *> space' *> parseBag
+  let bag = (,) <$> decimal <*> (space' *> parseBag)
       noBags = string "no other bags" $> []
    in (bag `sepBy1'` string ", ") <|> noBags
 
@@ -75,3 +82,18 @@ findBagsToContain rules needle =
 part1 :: Text -> Either String Int
 part1 =
   fmap (Set.size . flip findBagsToContain (Bag "shiny gold")) . readRules
+
+-- Part 2
+
+lookupBag :: Bag -> [BagRule] -> [(Int, Bag)]
+lookupBag needle =
+  maybe [] carriesQty . find ((==) needle . bag)
+
+countBagsIn :: Bag -> [BagRule] -> Int
+countBagsIn needle rules =
+  let direct = lookupBag needle rules
+      step (qty, b) = qty + qty * countBagsIn b rules
+   in sum (step <$> direct)
+
+part2 :: Text -> Either String Int
+part2 = fmap (countBagsIn (Bag "shiny gold")) . readRules
