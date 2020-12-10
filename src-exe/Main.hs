@@ -9,17 +9,15 @@ import qualified Aoc.Day06 as Day06
 import qualified Aoc.Day07 as Day07
 import qualified Aoc.Day08 as Day08
 import qualified Aoc.Day09 as Day09
-
+import qualified Aoc.Day10 as Day10
 import qualified Data.Text.IO as T
 
 main :: IO ()
 main = do
-  putStrLn "Day 9"
+  putStrLn "Day 10"
   putStrLn "======"
-  day09Input <- T.readFile "data/day09.txt"
-  print $ Day09.part1 day09Input
-  print $ Day09.part2 day09Input
-
+  day10Input <- T.readFile "data/day10.txt"
+  print $ Day10.part1 day10Input
 
 previous :: IO ()
 previous = do
@@ -62,3 +60,8 @@ previous = do
   day08Input <- T.readFile "data/day08.txt"
   print $ Day08.part1 day08Input
   print $ Day08.part2 day08Input
+  putStrLn "Day 9"
+  putStrLn "======"
+  day09Input <- T.readFile "data/day09.txt"
+  print $ Day09.part1 day09Input
+  print $ Day09.part2 day09Input
