@@ -30,6 +30,7 @@ common common-options
 library
   import:              common-options
   exposed-modules:     Aoc,
+                       Aoc.Array2D,
                        Aoc.Day01,
                        Aoc.Day02,
                        Aoc.Day03,
@@ -59,7 +60,7 @@ test-suite adventofcode2020-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  build-depends:       adventofcode2020, hspec ^>=2.7.4
+  build-depends:       adventofcode2020, hspec ^>=2.7.4, QuickCheck ^>=2.14.2
   build-tool-depends:  hspec-discover:hspec-discover == 2.*
   ghc-options:         -threaded
                        -rtsopts

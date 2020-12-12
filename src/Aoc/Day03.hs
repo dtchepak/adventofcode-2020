@@ -15,24 +15,13 @@ module Aoc.Day03
   )
 where
 
+import Aoc.Array2D
 import qualified Data.List.NonEmpty as NEL
 import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Data.Vector.Unboxed ((!?))
 import qualified Data.Vector.Unboxed as V
-
-newtype Width = Width Int
-  deriving (Show, Eq, Ord)
-
-newtype Point2D = Point2D (Int, Int)
-  deriving (Show, Eq)
-
-instance Semigroup Point2D where
-  Point2D (x, y) <> Point2D (x2, y2) = Point2D (x + x2, y + y2)
-
-instance Monoid Point2D where
-  mempty = Point2D (0, 0)
 
 data TreeLocations
   = TreeLocations
@@ -46,9 +35,6 @@ width (TreeLocations (Width w) _) = w
 height :: TreeLocations -> Int
 height (TreeLocations (Width w) v) =
   V.length v `div` w
-
-pointToIndex :: Width -> Point2D -> Int
-pointToIndex (Width w) (Point2D (x, y)) = x `mod` w + y * w
 
 (??) :: Maybe a -> a -> a
 (??) = flip fromMaybe
