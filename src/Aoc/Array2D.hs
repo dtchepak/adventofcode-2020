@@ -11,6 +11,7 @@ module Aoc.Array2D
     cols,
     rows,
     inBounds,
+    multiplyPt,
   )
 where
 
@@ -28,6 +29,9 @@ instance Semigroup Point2D where
 
 instance Monoid Point2D where
   mempty = Point2D (0, 0)
+
+multiplyPt :: Point2D -> Int -> Point2D
+multiplyPt (Point2D (x, y)) m = Point2D (m * x, m * y)
 
 data Array2D a = Array2D Width (Vector a)
   deriving (Show, Eq)
