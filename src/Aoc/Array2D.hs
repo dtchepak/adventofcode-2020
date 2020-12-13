@@ -8,6 +8,9 @@ module Aoc.Array2D
     neighbours,
     lookupPts,
     imap,
+    cols,
+    rows,
+    inBounds,
   )
 where
 
@@ -41,13 +44,14 @@ pointToIndex (Width w) (Point2D (x, y)) =
    in if x < 0 || y < 0 then -1 else rowOffset + colOffset
 
 xOutOfBounds :: Point2D -> Width -> Bool
-xOutOfBounds (Point2D (x, _)) (Width w)=
+xOutOfBounds (Point2D (x, _)) (Width w) =
   x < 0 || x >= w
 
 lookupPt :: Array2D a -> Point2D -> Maybe a
 lookupPt (Array2D w v) p =
-  if p `xOutOfBounds` w then Nothing
-  else (V.!?) v . pointToIndex w $ p
+  if p `xOutOfBounds` w
+    then Nothing
+    else (V.!?) v . pointToIndex w $ p
 
 lookupPts :: Array2D a -> [Point2D] -> [Maybe a]
 lookupPts a = fmap (lookupPt a)
@@ -63,6 +67,18 @@ indexToPoint (Width w) =
 imap :: (Point2D -> a -> b) -> Array2D a -> Array2D b
 imap f (Array2D w a) =
   Array2D w (V.imap (f . indexToPoint w) a)
+
+cols :: Array2D a -> Int
+cols (Array2D (Width w) _) = w
+
+rows :: Array2D a -> Int
+rows (Array2D w v) =
+  let Point2D (_, y) = indexToPoint w (V.length v)
+   in y
+
+inBounds :: Array2D a -> Point2D -> Bool
+inBounds a (Point2D (x, y)) =
+  x >= 0 && x < cols a && y >= 0 && y < rows a
 
 neighbours :: Point2D -> [Point2D]
 neighbours (Point2D (x, y)) =

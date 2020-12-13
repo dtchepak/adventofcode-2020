@@ -4,7 +4,6 @@ import Aoc.Array2D
 import Aoc.Day11
 import Data.Text (Text)
 import qualified Data.Text as T
-import qualified Data.Vector as V
 import Test.Hspec
 
 pt :: (Int, Int) -> Point2D
@@ -47,11 +46,20 @@ spec = do
     specify "test update gen1" $ do
       updatePosition (importArray gen1Example) (pt (0, 0)) '#' `shouldBe` '#'
 
-showArray :: Array2D Char -> String
-showArray (Array2D (Width w) v) =
-  let rows [] = []
-      rows xs@(_ : _) = take w xs : rows (drop w xs)
-   in unlines (rows (V.toList v))
+  describe "part 2 examples" $ do
+    let exampleWith8 = importArray part2ExampleWith8
+    specify "pts in direction" $ do
+      ptsInDirection exampleWith8 (pt (1, 1)) (pt (3, 4))
+        `shouldBe` pt <$> [(4, 5), (5, 6), (6, 7), (7, 8)]
+    specify "look directions" $ do
+      flip (firstSeatInDirection exampleWith8) (pt (3, 4)) <$> allDirections
+        `shouldBe` Just <$> "########"
+    specify "look NE" $ do
+      firstSeatInDirection exampleWith8 (pt (1, -1)) (pt (3, 4))
+        `shouldBe` Just '#'
+    specify "8 seats visible" $ do
+      (length . filter isOccupied . firstSeatsInAnyDirection exampleWith8 $ pt (3, 4))
+        `shouldBe` 8
 
 gen0Example :: Text
 gen0Example =
@@ -111,4 +119,18 @@ genStableExample =
       "#L#L##L#L#",
       "#.LLLLLL.L",
       "#.#L#L#.##"
+    ]
+
+part2ExampleWith8 :: Text
+part2ExampleWith8 =
+  T.unlines
+    [ ".......#.",
+      "...#.....",
+      ".#.......",
+      ".........",
+      "..#L....#",
+      "....#....",
+      ".........",
+      "#........",
+      "...#....."
     ]

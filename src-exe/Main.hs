@@ -19,7 +19,7 @@ main = do
   putStrLn "======"
   day11Input <- T.readFile "data/day11.txt"
   print $ Day11.part1 day11Input
-  -- print $ Day11.part2 day11Input
+  print $ Day11.part2 day11Input
 
 
 previous :: IO ()

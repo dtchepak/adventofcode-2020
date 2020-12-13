@@ -35,6 +35,10 @@ spec = do
       lookupPt a (pt (3, 2)) `shouldBe` Just 12
     specify "missing pt" $ do
       lookupPt a (pt (4, 3)) `shouldBe` Nothing
+    specify "in bounds" $ do
+      inBounds a <$> (pt <$> [(0, 0), (3, 0), (0, 2), (3, 2)]) `shouldBe` [True, True, True, True]
+    specify "out of bounds" $ do
+      inBounds a <$> (pt <$> [(0, -1), (-1, 0), (4, 0), (0, 3), (3, 3)]) `shouldBe` [False, False, False, False, False]
     specify "point to index" $ do
       pointToIndex (Width 10) (Point2D (1, 1)) `shouldBe` 11
     specify "invalid point to index" $ do
