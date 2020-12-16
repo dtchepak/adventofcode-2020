@@ -76,47 +76,22 @@ east x = updatePosition (<> (eastBearing `multiplyPt` x))
 west :: Positionable a => Int -> a -> a
 west x = east (- x)
 
+-- | Rotate a point clockwise about the origin a number of degrees (must be a multiple of 90)
+-- Clockwise rotation of (x,y): x' = x cos t - y sin t; y' = y cos t + x sin t
+rotate :: Positionable a => Int -> a -> a
+rotate 90 = updatePosition (\(Point2D (x, y)) -> Point2D (- y, x))
+rotate 180 = rotate 90 . rotate 90
+rotate 270 = rotate (-90)
+rotate (-90) = updatePosition (\(Point2D (x, y)) -> Point2D (y, - x))
+rotate (-180) = rotate 180
+rotate (-270) = rotate 90
+rotate _ = id
+
 left :: Int -> Ship -> Ship
-left 90 =
-  updateBearing
-    ( \b ->
-        if b == northBearing
-          then westBearing
-          else
-            if b == westBearing
-              then southBearing
-              else
-                if b == southBearing
-                  then eastBearing
-                  else
-                    if b == eastBearing
-                      then northBearing
-                      else b
-    )
-left 180 = left 90 . left 90
-left 270 = right 90
-left _ = id
+left = updateBearing . rotate
 
 right :: Int -> Ship -> Ship
-right 90 =
-  updateBearing
-    ( \b ->
-        if b == northBearing
-          then eastBearing
-          else
-            if b == eastBearing
-              then southBearing
-              else
-                if b == southBearing
-                  then westBearing
-                  else
-                    if b == westBearing
-                      then northBearing
-                      else b
-    )
-right 180 = right 90 . right 90
-right 270 = left 90
-right _ = id
+right = left . negate
 
 navigate :: (Text, Int) -> Ship -> Ship
 navigate (cmd, arg) =
@@ -154,18 +129,11 @@ data WaypointShip = WShip Waypoint Point2D
 instance Positionable WaypointShip where
   updatePosition f (WShip w p) = WShip w (f p)
 
--- rotate point anticlockwise: x' = x cos t - y sin t; y' = y cos t + x sin t
 waypointLeft :: Int -> Waypoint -> Waypoint
-waypointLeft 90 = updatePosition (\(Point2D (x, y)) -> Point2D (- y, x))
-waypointLeft 180 = waypointLeft 90 . waypointLeft 90
-waypointLeft 270 = waypointRight 90
-waypointLeft _ = id
+waypointLeft = updatePosition . rotate
 
 waypointRight :: Int -> Waypoint -> Waypoint
-waypointRight 90 = updatePosition (\(Point2D (x, y)) -> Point2D (y, - x))
-waypointRight 180 = waypointRight 90 . waypointRight 90
-waypointRight 270 = waypointLeft 90
-waypointRight _ = id
+waypointRight = waypointLeft . negate
 
 instance Positionable Point2D where
   updatePosition = id
