@@ -83,7 +83,7 @@ Once a valid timestamp `ts` is found for a set of inputs, the next valid timesta
 
 To work out a new valid timestamp for an additional input, check timestamps that are valid for the existing
 inputs (using `ts + lcs`) until one is also compatible with the additional input, then update the state with
-the new lcm and ts.
+the new lcm (https://stackoverflow.com/a/147523/906) and ts.
 -}
 part2 :: Int
 part2 =
