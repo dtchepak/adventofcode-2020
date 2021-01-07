@@ -20,6 +20,7 @@ main = do
   putStrLn "Day 13"
   putStrLn "======"
   print Day13.part1 
+  print Day13.part2
 
 previous :: IO ()
 previous = do

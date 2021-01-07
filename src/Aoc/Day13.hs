@@ -3,6 +3,7 @@ module Aoc.Day13
     part1,
     part2,
     consecutive,
+    part2Basic
   )
 where
 
@@ -49,14 +50,15 @@ parse =
   let parseInt = either (const 0) fst . T.decimal
    in filter ((/= 0) . snd) . fmap (parseInt <$>) . zip [0 ..] . T.split (== ',')
 
--- | Check bus arrives at ts+i.
+-- | Check bus arrives at t+i.
 tryTimestamp :: Int -> (Index, Int) -> Bool
-tryTimestamp ts (i, bus) =
+tryTimestamp t (i, bus) =
   -- If it divides evenly without remainder then it will arrive at this time.
-  (ts + i) `mod` bus == 0
+  (t + i) `mod` bus == 0
+--  t `mod` bus == (bus - i) `mod` bus
 
 tryTimestampForAll :: Int -> [(Index, Int)] -> Bool
-tryTimestampForAll ts = all (tryTimestamp ts)
+tryTimestampForAll = all . tryTimestamp
 
 consecutive :: Text -> Maybe Int
 consecutive txt =
@@ -66,7 +68,28 @@ consecutive txt =
       findMultiplier = find (flip tryTimestampForAll input . timestampFor) [1 ..]
    in timestampFor <$> findMultiplier
 
---  in findMultiplier
+-- Too slow for large inputs.
+part2Basic :: Maybe Int
+part2Basic = consecutive part2Times
 
-part2 :: Maybe Int
-part2 = consecutive part2Times
+type Input = (Index, Int)
+
+data State = State {lcm' :: Int, ts :: Int}
+  deriving (Show, Eq)
+
+{-
+Once a valid timestamp `ts` is found for a set of inputs, the next valid timestamp will be `ts + lcm`
+(where lcm = lowest common multiple of the inputs used for ts).
+
+To work out a new valid timestamp for an additional input, check timestamps that are valid for the existing
+inputs (using `ts + lcs`) until one is also compatible with the additional input, then update the state with
+the new lcm and ts.
+-}
+part2 :: Int
+part2 =
+  let step :: Input -> State -> State
+      step input (State l t) =
+        if tryTimestamp t input
+          then State (lcm (snd input) l) t
+          else step input (State l (l + t))
+   in ts $ foldr step (State 1 0) (parse part2Times)
